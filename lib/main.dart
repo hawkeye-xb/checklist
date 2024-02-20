@@ -1,5 +1,22 @@
+import 'dart:ffi';
+
 import 'package:checklist/details.dart';
 import 'package:flutter/material.dart';
+import 'package:checklist/components/card.dart';
+
+class CardType {
+  final String title;
+  // final String description;
+  final List<ContentList> contentList;
+  final String id;
+
+  CardType({
+    required this.title,
+    // this.description = '',
+    this.contentList = const [],
+    required this.id
+  });
+}
 
 void main() {
   runApp(const MyApp());
@@ -18,24 +35,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      // routes: {
-      //   '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page By / Path'),
-      // },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -44,27 +49,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // mock data
+  final List<CardType> _cardList = [
+    CardType(
+      title: 'Card 1',
+      // description: 'This is a card',
+      contentList: [
+        const ContentList(id: '1', content: 'content 1'),
+        const ContentList(id: '2', content: 'content 2'),
+        const ContentList(id: '3', content: 'content 3'),
+      ],
+      id: '1',
+    ),
+    CardType(
+      title: 'Card 2',
+      // description: 'This is a card',
+      contentList: [
+        const ContentList(id: '4', content: 'content 4'),
+        const ContentList(id: '5', content: 'content 5'),
+        const ContentList(id: '6', content: 'content 6'),
+      ],
+      id: '2',
+    ),
+    CardType(
+      title: 'Card 3',
+      // description: 'This is a card',
+      contentList: [
+        const ContentList(id: '7', content: 'content 7'),
+        const ContentList(id: '8', content: 'content 8'),
+        const ContentList(id: '9', content: 'content 9'),
+      ],
+      id: '3',
+    ),
+  ];
+
   int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    print('main app builded'); // 从路由返回不触发
+
+    const double minCardWidth = 200;
+
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -76,24 +108,32 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              padding: const EdgeInsets.all(16.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width ~/ 150,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1, // 宽高比
+                ),
+                itemCount: _cardList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    constraints: const BoxConstraints(minWidth: 150),
+                    child: CardWidget(
+                      id: _cardList[index].id,
+                      title: _cardList[index].title,
+                      firstThreeItems: _cardList[index].contentList,
+                    ),
+                  );
+                },
+              ),
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -112,7 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         // onPressed: _incrementCounter,
         onPressed: () {
-          Navigator.pushNamed(context, '/second');
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
