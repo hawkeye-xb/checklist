@@ -13,10 +13,14 @@ class ContentList {
 }
 
 class CardWidget extends StatelessWidget {
-  final String id; // or int?
+  final String id;
   final String title;
   final List<ContentList> firstThreeItems;
   final int timestamp; // ?
+
+  final Function(String)? onDelete;
+  final Function(String)? onStar;
+  final Function(String)? createDuplicate;
 
   const CardWidget({
     super.key,
@@ -25,6 +29,9 @@ class CardWidget extends StatelessWidget {
     this.firstThreeItems = const [],
     // 日期默认1970年1月1日
     this.timestamp = 0,
+    this.onDelete,
+    this.onStar,
+    this.createDuplicate,
   });
 
   @override
@@ -124,20 +131,28 @@ class CardWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  print('star');
+                  createDuplicate?.call(id);
                 },
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
-                  child: const Icon(Icons.star, size: 16.0,),
+                  child: const Icon(Icons.copy, size: 16.0,),
                 ),
               ),
+              // GestureDetector(
+              //   onTap: () {
+              //     onStar?.call(id);
+              //   },
+              //   child: Container(
+              //     padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
+              //     child: const Icon(Icons.star, size: 16.0,),
+              //   ),
+              // ),
+              // TODO: not use delete, batch delete
               GestureDetector(
                 onTap: () {
-                  print('delete');
+                  onDelete?.call(id);
                 },
-                child: Container(
-                  child: const Icon(Icons.delete, size: 16.0,),
-                ),
+                child: const Icon(Icons.delete, size: 16.0,),
               ),
             ],
           ),

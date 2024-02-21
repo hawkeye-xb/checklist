@@ -85,7 +85,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print('main app builded'); // 从路由返回不触发
 
-    const double minCardWidth = 200;
+    void handleCardDelete(String id) {
+      print('delete card id: $id'); // double checked
+    }
+
+    void handleCardCollect(String id) {
+      print('collect card id: $id'); // double checked
+    }
 
     return Scaffold(
       body: Flex(
@@ -106,25 +112,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     constraints: const BoxConstraints(minWidth: 150),
-                    child: CardWidget(
-                      id: _cardList[index].id,
-                      title: _cardList[index].title,
-                      firstThreeItems: _cardList[index].contentList,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return DetailsPage(id: _cardList[index].id);
+                        }));
+                      },
+                      onLongPress: () {
+                        print('long press');
+                        // 进入批量删除状态，长按的id默认选中
+                      },
+                      child: CardWidget(
+                        id: _cardList[index].id,
+                        title: _cardList[index].title,
+                        firstThreeItems: _cardList[index].contentList,
+                        onDelete: handleCardDelete,
+                        onStar: handleCardCollect,
+                      ),
                     ),
                   );
                 },
               ),
             ),
           ),
-          const Text(
-            'You have pushed the button this many times:',
-          ),
-          // TODO: Remove
-          TextButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return const DetailsPage(id: '100');
-            }));
-          }, child: const Text('Go to Second Page')),
         ],
       ),
     );
