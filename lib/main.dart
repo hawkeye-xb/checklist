@@ -34,15 +34,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -55,9 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 1',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '1', content: 'content 1'),
-        const ContentList(id: '2', content: 'content 2'),
-        const ContentList(id: '3', content: 'content 3'),
+        const ContentList(id: '1', content: '车厘子', checked: true),
+        const ContentList(id: '2', content: '刮胡刀'),
+        const ContentList(id: '3', content: '手机充电器 * 2', checked: true),
       ],
       id: '1',
     ),
@@ -65,9 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 2',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '4', content: 'content 4'),
-        const ContentList(id: '5', content: 'content 5'),
-        const ContentList(id: '6', content: 'content 6'),
+        const ContentList(id: '4', content: '手机、电脑、手表、iPad充电器'),
+        const ContentList(id: '5', content: 'contentbNSDCNSs'),
+        const ContentList(id: '6', content: 'contents:sjhcaycbNSDCNSs'),
       ],
       id: '2',
     ),
@@ -75,21 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 3',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '7', content: 'content 7'),
-        const ContentList(id: '8', content: 'content 8'),
-        const ContentList(id: '9', content: 'content 9'),
+        const ContentList(id: '7', content: 'caycbNSDCNSs'),
+        const ContentList(id: '8', content: 'coents:sjhcaycbNSDCNSs'),
+        const ContentList(id: '9', content: 'contecbNSDCNSs'),
       ],
       id: '3',
     ),
   ];
-
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,21 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
     const double minCardWidth = 200;
 
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+      body: Flex(
+        direction: Axis.vertical,
+        children: [
+          Expanded(
+            child: Container(
+              // height: MediaQuery.of(context).size.height * 0.5,
               padding: const EdgeInsets.all(16.0),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -134,28 +115,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const DetailsPage(id: '100');
-              }));
-            }, child: const Text('Go to Second Page'))
-          ],
-        ),
+          ),
+          const Text(
+            'You have pushed the button this many times:',
+          ),
+          // TODO: Remove
+          TextButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const DetailsPage(id: '100');
+            }));
+          }, child: const Text('Go to Second Page')),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        // onPressed: _incrementCounter,
-        onPressed: () {
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

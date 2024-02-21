@@ -30,7 +30,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -38,11 +38,111 @@ class CardWidget extends StatelessWidget {
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10.0,
-            offset: Offset(0.0, 10.0),
+            offset: Offset(0.0, 0.0),
           ),
         ],
       ),
-      child: const Text("Card Widget"),
+      child: Flex(
+        direction: Axis.vertical,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20.0,
+              height: 1.5,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // 占位
+          const SizedBox(height: 8.0,),
+          Flexible(
+            flex: 1,
+            child: ListView.builder(
+              itemCount: firstThreeItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Transform.scale(
+                      scale: 0.8,
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: SizedBox(
+                          width: 24.0,
+                          height: 24.0,
+                          child: Radio(
+                            groupValue: true,
+                            value: firstThreeItems[index].checked,
+                            onChanged: (bool? value) {},
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: RichText(
+                        text: TextSpan(
+                          text: firstThreeItems[index].content,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            height: 1.5,
+                          ).merge(
+                            firstThreeItems[index].checked 
+                              ? const TextStyle(decoration: TextDecoration.lineThrough, color: Colors.black38,)
+                              : const TextStyle(color: Colors.black87),
+                          ),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    )
+                    ,
+                  ],
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8.0,),
+          Flex(
+            direction: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.center, // 子元素居中对齐
+            children: [
+              const Text(
+                '02-02',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  height: 1.5,
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Container(), // Flexible用于填充空间
+              ),
+              GestureDetector(
+                onTap: () {
+                  print('star');
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
+                  child: const Icon(Icons.star, size: 16.0,),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  print('delete');
+                },
+                child: Container(
+                  child: const Icon(Icons.delete, size: 16.0,),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
