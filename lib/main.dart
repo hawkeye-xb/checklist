@@ -1,22 +1,7 @@
-import 'dart:ffi';
-
 import 'package:checklist/details.dart';
 import 'package:flutter/material.dart';
 import 'package:checklist/components/card.dart';
-
-class CardType {
-  final String title;
-  // final String description;
-  final List<ContentList> contentList;
-  final String id;
-
-  CardType({
-    required this.title,
-    // this.description = '',
-    this.contentList = const [],
-    required this.id
-  });
-}
+import 'package:checklist/types.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,9 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 1',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '1', content: '车厘子', checked: true),
-        const ContentList(id: '2', content: '刮胡刀'),
-        const ContentList(id: '3', content: '手机充电器 * 2', checked: true),
+        ContentList(id: '1', content: '车厘子', checked: true),
+        ContentList(id: '2', content: '刮胡刀'),
+        ContentList(id: '3', content: '手机充电器 * 2', checked: true),
       ],
       id: '1',
     ),
@@ -63,9 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 2',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '4', content: '手机、电脑、手表、iPad充电器'),
-        const ContentList(id: '5', content: 'contentbNSDCNSs'),
-        const ContentList(id: '6', content: 'contents:sjhcaycbNSDCNSs'),
+        ContentList(id: '4', content: '手机、电脑、手表、iPad充电器'),
+        ContentList(id: '5', content: 'contentbNSDCNSs'),
+        ContentList(id: '6', content: 'contents:sjhcaycbNSDCNSs'),
       ],
       id: '2',
     ),
@@ -73,9 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Card 3',
       // description: 'This is a card',
       contentList: [
-        const ContentList(id: '7', content: 'caycbNSDCNSs'),
-        const ContentList(id: '8', content: 'coents:sjhcaycbNSDCNSs'),
-        const ContentList(id: '9', content: 'contecbNSDCNSs'),
+        ContentList(id: '7', content: 'caycbNSDCNSs'),
+        ContentList(id: '8', content: 'coents:sjhcaycbNSDCNSs'),
+        ContentList(id: '9', content: 'contecbNSDCNSs'),
       ],
       id: '3',
     ),
@@ -115,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return DetailsPage(id: _cardList[index].id);
+                          return DetailsPage(id: _cardList[index].id, defaultCardInfo: _cardList[index],);
                         }));
                       },
                       onLongPress: () {

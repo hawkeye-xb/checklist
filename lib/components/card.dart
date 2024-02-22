@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
-
-class ContentList {
-  final String id;
-  final String content;
-  final bool checked;
-
-  const ContentList({
-    required this.id,
-    required this.content,
-    this.checked = false,
-  });
-}
+import 'package:checklist/types.dart';
 
 class CardWidget extends StatelessWidget {
   final String id;
