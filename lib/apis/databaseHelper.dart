@@ -79,8 +79,7 @@ class DatabaseHelper {
       cardTypes = list.isNotEmpty ? list.map((c) => CardType.fromMap(c)).toList() : [];
     } catch (e) {
       print('Error when getting card types: $e');
-      // 在这里处理错误，例如显示一个错误消息，是否需要重新创建表？
-      if (_db != null) {
+      if (e.toString().contains('no such table: CardType') && _db != null) {
         _onCreate(_db!, 1);
       }
     }

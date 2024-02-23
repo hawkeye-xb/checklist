@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:checklist/types.dart';
+import 'package:intl/intl.dart';
 
 class CardWidget extends StatelessWidget {
   final int id;
@@ -22,6 +23,27 @@ class CardWidget extends StatelessWidget {
     this.onStar,
     this.createDuplicate,
   });
+
+  /*
+    处理时间戳函数。入参时间戳
+    - [] 日期显示规则
+      - [] 一天内：展示小时
+      - [] 超过一天：展示月日
+      - [] 超过一年：展示年月日
+  */ 
+  String _handleTimestamp(int timestamp) {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    if (now.year == date.year) {
+      if (now.month == date.month && now.day == date.day) {
+        return DateFormat.Hm().format(date);
+      } else {
+        return DateFormat.Md().format(date);
+      }
+    } else {
+      return DateFormat.yMd().format(date);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +78,7 @@ class CardWidget extends StatelessWidget {
           Flexible(
             flex: 1,
             child: ListView.builder(
-              itemCount: firstThreeItems.length,
+              itemCount: firstThreeItems.length, // TODO: Max 3
               itemBuilder: (BuildContext context, int index) {
                 return Flex(
                   direction: Axis.horizontal,
@@ -108,10 +130,7 @@ class CardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center, // 子元素居中对齐
             children: [
               Text(
-                DateTime
-                  .fromMillisecondsSinceEpoch(timestamp)
-                  .toString()
-                  .substring(0, 10),
+                _handleTimestamp(timestamp),
                 style: const TextStyle(
                   fontSize: 16.0,
                   height: 1.5,

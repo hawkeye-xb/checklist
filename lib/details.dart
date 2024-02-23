@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:checklist/types.dart';
+import 'apis/databaseHelper.dart';
+import 'package:intl/intl.dart';
+
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({
@@ -21,22 +24,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
   List<ContentList> _contentList = [];
 
-  // mock data
-  // final CardType defaultCard = CardType(
-  //   title: 'Card 1',
-  //   contentList: [
-  //     ContentList(id: '1', content: '车厘子', checked: true),
-  //     ContentList(id: '2', content: '刮胡刀'),
-  //     ContentList(id: '3', content: '手机充电器 * 2', checked: true),
-  //   ],
-  //   id: '1',
-  // );
-
   @override
   void initState() {
     super.initState();
-    print('DetailsPage initState() called');
-    print(widget.defaultCardInfo.title);
 
     _titleController.text = widget.defaultCardInfo.title;
 
@@ -47,7 +37,6 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   void dispose() {
-    print('DetailsPage dispose() called');
     // Dispose of the controllers when the widget is removed from the widget tree
     _controllers.forEach((controller) => controller.dispose());
     _titleController.dispose();
@@ -62,20 +51,25 @@ class _DetailsPageState extends State<DetailsPage> {
         actions: [
           IconButton(
             onPressed: () {
-              print('save');
-              print('_titleController.text: ${_titleController.text}');
-              // Navigator.of(context).pop(_editedData);
               List<Map<String, dynamic>> latestValues = _contentList.asMap().entries.map((entry) {
                 int idx = entry.key;
                 ContentList item = entry.value;
                 return {
-                  'id': item.id,
+                  // 'id': item.id,
                   'checked': item.checked,
                   'content': _controllers[idx].text, // new value
                 };
               }).toList();
-
-              print('latestValues: $latestValues');
+              // TODO: diff 判断，提示用户是否保存
+              CardType updatedCard = CardType(
+                id: widget.defaultCardInfo.id,
+                title: _titleController.text,
+                contentList: latestValues.map((map) => ContentList(content: map['content'] ?? '', checked: map['checked'] ?? false)).toList(),
+                created_at: widget.defaultCardInfo.created_at,
+                updated_at: DateTime.now().millisecondsSinceEpoch,
+              );
+              
+              DatabaseHelper().updateCardType(updatedCard);
             }, 
             icon: const Icon(Icons.check),
           ),
@@ -90,8 +84,14 @@ class _DetailsPageState extends State<DetailsPage> {
             TextFormField(
               controller: _titleController,
             ),
-            const Text('02-02'),
-            const SizedBox(height: 8.0,),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 8.0),
+              child: Text(
+                DateFormat('yyyy-MM-dd HH:mm:ss').format(
+                  DateTime.fromMillisecondsSinceEpoch(widget.defaultCardInfo.updated_at)
+                ).toString()
+              ),
+            ),
             Flexible(
               flex: 1,
               child: ListView.builder(
@@ -122,6 +122,16 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                       ),
+                      // delete
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _contentList.removeAt(index);
+                            _controllers.removeAt(index);
+                          });
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
                     ],
                   );
                 },
@@ -129,6 +139,15 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _contentList.add(ContentList(content: '', checked: false));
+            _controllers.add(TextEditingController(text: ''));
+          });
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
