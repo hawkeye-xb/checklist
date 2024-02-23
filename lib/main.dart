@@ -2,8 +2,11 @@ import 'package:checklist/details.dart';
 import 'package:flutter/material.dart';
 import 'package:checklist/components/card.dart';
 import 'package:checklist/types.dart';
+import 'apis/databaseHelper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter绑定初始化
+  DatabaseHelper().db; // 初始化数据库
   runApp(const MyApp());
 }
 
@@ -32,50 +35,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // mock data
-  final List<CardType> _cardList = [
-    CardType(
-      title: 'Card 1',
-      // description: 'This is a card',
-      contentList: [
-        ContentList(id: '1', content: '车厘子', checked: true),
-        ContentList(id: '2', content: '刮胡刀'),
-        ContentList(id: '3', content: '手机充电器 * 2', checked: true),
-      ],
-      id: '1',
-    ),
-    CardType(
-      title: 'Card 2',
-      // description: 'This is a card',
-      contentList: [
-        ContentList(id: '4', content: '手机、电脑、手表、iPad充电器'),
-        ContentList(id: '5', content: 'contentbNSDCNSs'),
-        ContentList(id: '6', content: 'contents:sjhcaycbNSDCNSs'),
-      ],
-      id: '2',
-    ),
-    CardType(
-      title: 'Card 3',
-      // description: 'This is a card',
-      contentList: [
-        ContentList(id: '7', content: 'caycbNSDCNSs'),
-        ContentList(id: '8', content: 'coents:sjhcaycbNSDCNSs'),
-        ContentList(id: '9', content: 'contecbNSDCNSs'),
-      ],
-      id: '3',
-    ),
-  ];
+  final List<CardType> _cardList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    print('MyHomePage initState() called');
+    DatabaseHelper().getCardTypes().then((value) {
+      print('getCardTypes() called');
+      // print(value[0].id); // []
+      setState(() {
+        _cardList.addAll(value);
+      });
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant MyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('MyHomePage didUpdateWidget() called');
+  }
 
   @override
   Widget build(BuildContext context) {
     print('main app builded'); // 从路由返回不触发
 
-    void handleCardDelete(String id) {
+    void handleCardDelete(int id) {
       print('delete card id: $id'); // double checked
     }
 
-    void handleCardCollect(String id) {
+    void handleCardCollect(int id) {
       print('collect card id: $id'); // double checked
+    }
+
+    void navigateToDetailsPage(value) {
+      if (value == null) { return; }
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return DetailsPage(defaultCardInfo: value,);
+      })).then((value) => {
+        print('pop from details page'),
+      });
     }
 
     return Scaffold(
@@ -99,9 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     constraints: const BoxConstraints(minWidth: 150),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return DetailsPage(id: _cardList[index].id, defaultCardInfo: _cardList[index],);
-                        }));
+                        navigateToDetailsPage(_cardList[index]);
                       },
                       onLongPress: () {
                         print('long press');
@@ -111,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         id: _cardList[index].id,
                         title: _cardList[index].title,
                         firstThreeItems: _cardList[index].contentList,
+                        timestamp: _cardList[index].updated_at,
                         onDelete: handleCardDelete,
                         onStar: handleCardCollect,
                       ),
@@ -120,7 +118,53 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+          // clear all button
+          ElevatedButton(
+            onPressed: () {
+              print('clear all');
+              DatabaseHelper().clearCardTypes().then((value) {
+                print('clearCardTypes() called');
+                print(value);
+                setState(() {
+                  _cardList.clear();
+                });
+              });
+            },
+            child: const Text('Clear All'),
+          ),
+          // deleteAllTables
+          ElevatedButton(
+            onPressed: () {
+              print('delete all tables');
+              DatabaseHelper().deleteAllTables().then((value) {
+                print('deleteAllTables() called');
+              });
+            },
+            child: const Text('Delete All Tables'),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          CardType newCard = CardType(
+            id: 0,
+            title: DateTime.now().toString().substring(0, 10), // TODO: 日期格式化
+            contentList: [],
+            created_at: DateTime.now().millisecondsSinceEpoch,
+            updated_at: DateTime.now().millisecondsSinceEpoch,
+          );
+          DatabaseHelper()
+            .saveCardType(newCard)
+            .then((value) {
+              DatabaseHelper().getCardType(value)
+                .then((value) {
+                  if (value != null) {
+                    navigateToDetailsPage(value);
+                  }
+                });
+            });
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

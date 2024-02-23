@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:checklist/types.dart';
 
 class CardWidget extends StatelessWidget {
-  final String id;
+  final int id;
   final String title;
   final List<ContentList> firstThreeItems;
   final int timestamp; // ?
 
-  final Function(String)? onDelete;
-  final Function(String)? onStar;
-  final Function(String)? createDuplicate;
+  final Function(int)? onDelete; // id
+  final Function(int)? onStar; // id
+  final Function(int)? createDuplicate; // id
 
   const CardWidget({
     super.key,
@@ -107,9 +107,12 @@ class CardWidget extends StatelessWidget {
             direction: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.center, // 子元素居中对齐
             children: [
-              const Text(
-                '02-02',
-                style: TextStyle(
+              Text(
+                DateTime
+                  .fromMillisecondsSinceEpoch(timestamp)
+                  .toString()
+                  .substring(0, 10),
+                style: const TextStyle(
                   fontSize: 16.0,
                   height: 1.5,
                 ),

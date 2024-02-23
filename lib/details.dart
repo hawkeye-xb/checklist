@@ -4,11 +4,11 @@ import 'package:checklist/types.dart';
 class DetailsPage extends StatefulWidget {
   const DetailsPage({
     super.key,
-    required this.id,
+    // required this.id,
     required this.defaultCardInfo,
   });
 
-  final String id;
+  // final int id;
   final CardType defaultCardInfo;
 
   @override
@@ -36,7 +36,6 @@ class _DetailsPageState extends State<DetailsPage> {
   void initState() {
     super.initState();
     print('DetailsPage initState() called');
-    print('widget.id: ${widget.id}');
     print(widget.defaultCardInfo.title);
 
     _titleController.text = widget.defaultCardInfo.title;
