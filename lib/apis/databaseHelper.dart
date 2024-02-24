@@ -98,12 +98,21 @@ class DatabaseHelper {
   }
 
   // 删除CardType
-  Future<int> deleteCardType(String id) async {
+  Future<int> deleteCardType(int id) async {
     var dbClient = await db;
     return await dbClient.delete(
       "CardType",
       where: 'id = ?',
       whereArgs: [id],
+    );
+  }
+
+  // 删除多个CardTypes，入参ids
+  Future<int> deleteCardTypes(List<int> ids) async {
+    var dbClient = await db;
+    return await dbClient.delete(
+      "CardType",
+      where: 'id IN (${ids.join(",")})',
     );
   }
 

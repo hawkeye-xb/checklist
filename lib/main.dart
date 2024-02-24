@@ -36,15 +36,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _delete = false;
+  final List<int> _selectedIds = [];
+
   final List<CardType> _cardList = [];
+  void setCardList(List<CardType> value) {
+    _cardList.clear();
+    // 按照updated_at排序
+    _cardList.addAll(
+      value..sort((a, b) => b.updated_at.compareTo(a.updated_at))
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    print('MyHomePage initState() called');
     DatabaseHelper().getCardTypes().then((value) {
       setState(() {
-        _cardList.addAll(value);
+        setCardList(value);
       });
     });
   }
@@ -57,14 +66,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // 虚拟机弹出键盘调用好多次。不过有缓存倒是也快。
-
-    void handleCardDelete(int id) {
-      print('delete card id: $id'); // double checked
-    }
-
-    void handleCardCollect(int id) {
-      print('collect card id: $id'); // double checked
+    void handleCreateDuplicate(int id) {
+      DatabaseHelper().getCardType(id).then((value) {
+        if (value != null) {
+          CardType newCard = CardType(
+            id: 0,
+            title: '${value.title} (${DateFormat('yyyy-MM-dd').format(DateTime.now()).toString()})',
+            contentList: value.contentList,
+            created_at: DateTime.now().millisecondsSinceEpoch,
+            updated_at: DateTime.now().millisecondsSinceEpoch,
+          );
+          DatabaseHelper().saveCardType(newCard).then((value) {
+            DatabaseHelper().getCardTypes().then((value) {
+              setState(() {
+                setCardList(value);
+              });
+            });
+          });
+        }
+      });
     }
 
     void navigateToDetailsPage(value) {
@@ -75,17 +95,50 @@ class _MyHomePageState extends State<MyHomePage> {
         // 在这里获取新的数据并更新状态
         DatabaseHelper().getCardTypes().then((value) {
           setState(() {
-            _cardList.clear();
-            _cardList.addAll(value);
+            setCardList(value);
           });
         }),
       });
     }
 
     return Scaffold(
+      appBar: AppBar(
+        leading: _delete ? IconButton(
+          onPressed: () {
+            setState(() {
+              _delete = false;
+            });
+          },
+          icon: const Icon(Icons.close),
+        ) : null,
+        actions: !_delete ? [IconButton(
+          onPressed: () {
+             // 准备封装起来吧，计算位置
+            showMenu(
+              context: context,
+              position: const RelativeRect.fromLTRB(100000, 112, 0, 0),
+              items: [
+                const PopupMenuItem(
+                  value: 'BatchDelete', // TODO：枚举
+                  child: Text('批量删除'),
+                ),
+              ]
+            ).then((value) => {
+              if (value == 'BatchDelete') {
+                setState(() {
+                  _delete = true;
+                }),
+              }
+            });
+          },
+          icon: const Icon(Icons.settings),
+        )] : null,
+      ),
       body: Flex(
         direction: Axis.vertical,
         children: [
+          const Text('All Checklist cards'), // TODO: filter
+          // TODO: 搜索框
           Expanded(
             child: Container(
               // height: MediaQuery.of(context).size.height * 0.5,
@@ -100,22 +153,49 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: _cardList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
+                    key: ValueKey(_cardList[index].id),
                     constraints: const BoxConstraints(minWidth: 150),
                     child: GestureDetector(
                       onTap: () {
                         navigateToDetailsPage(_cardList[index]);
                       },
                       onLongPress: () {
-                        print('long press');
-                        // 进入批量删除状态，长按的id默认选中
+                        setState(() {
+                          _delete = true;
+                        });
                       },
                       child: CardWidget(
                         id: _cardList[index].id,
                         title: _cardList[index].title,
-                        firstThreeItems: _cardList[index].contentList,
+                        firstThreeItems: _cardList[index].contentList.length > 3 
+                          ? _cardList[index].contentList.sublist(0, 3)
+                          : _cardList[index].contentList,
                         timestamp: _cardList[index].updated_at,
-                        onDelete: handleCardDelete,
-                        onStar: handleCardCollect,
+                        extraChildren: _delete ? [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Checkbox(
+                              value: _selectedIds.contains(_cardList[index].id),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  if (value == true) {
+                                    _selectedIds.add(_cardList[index].id);
+                                  } else {
+                                    _selectedIds.remove(_cardList[index].id);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ] : [
+                          GestureDetector(
+                            onTap: () {
+                              handleCreateDuplicate(_cardList[index].id);
+                            },
+                            child: const Icon(Icons.copy, size: 18.0,),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -123,30 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // clear all button
-          // ElevatedButton(
-          //   onPressed: () {
-          //     print('clear all');
-          //     DatabaseHelper().clearCardTypes().then((value) {
-          //       print('clearCardTypes() called');
-          //       print(value);
-          //       setState(() {
-          //         _cardList.clear();
-          //       });
-          //     });
-          //   },
-          //   child: const Text('Clear All'),
-          // ),
-          // // deleteAllTables
-          // ElevatedButton(
-          //   onPressed: () {
-          //     print('delete all tables');
-          //     DatabaseHelper().deleteAllTables().then((value) {
-          //       print('deleteAllTables() called');
-          //     });
-          //   },
-          //   child: const Text('Delete All Tables'),
-          // ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -171,6 +227,45 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: const Icon(Icons.add),
       ),
+      bottomNavigationBar: _delete ? BottomNavigationBar(
+        // currentIndex: -1, // 怎么才能默认不选择
+        onTap: (int index) {
+          if (index == 0) {
+            // 删除
+            DatabaseHelper().deleteCardTypes(_selectedIds).then((value) {
+              DatabaseHelper().getCardTypes().then((value) {
+                setState(() {
+                  setCardList(value);
+                  _delete = false;
+                  _selectedIds.clear();
+                });
+              });
+            });
+          } else if (index == 1) {
+            // 全选
+            if (_selectedIds.length == _cardList.length) {
+              setState(() {
+                _selectedIds.clear();
+              });
+            } else {
+              setState(() {
+                _selectedIds.clear();
+                _selectedIds.addAll(_cardList.map((e) => e.id).toList());
+              });
+            }
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.delete),
+            label: '删除',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_add_check_outlined),
+            label: '全选',
+          ),
+        ],
+      ) : null,
     );
   }
 }

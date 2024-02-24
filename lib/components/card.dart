@@ -7,10 +7,7 @@ class CardWidget extends StatelessWidget {
   final String title;
   final List<ContentList> firstThreeItems;
   final int timestamp; // ?
-
-  final Function(int)? onDelete; // id
-  final Function(int)? onStar; // id
-  final Function(int)? createDuplicate; // id
+  final List<Widget> extraChildren;
 
   const CardWidget({
     super.key,
@@ -19,9 +16,7 @@ class CardWidget extends StatelessWidget {
     this.firstThreeItems = const [],
     // 日期默认1970年1月1日
     this.timestamp = 0,
-    this.onDelete,
-    this.onStar,
-    this.createDuplicate,
+    this.extraChildren = const [],
   });
 
   /*
@@ -70,7 +65,8 @@ class CardWidget extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20.0,
               height: 1.5,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           // 占位
@@ -78,7 +74,7 @@ class CardWidget extends StatelessWidget {
           Flexible(
             flex: 1,
             child: ListView.builder(
-              itemCount: firstThreeItems.length, // TODO: Max 3
+              itemCount: firstThreeItems.length,
               itemBuilder: (BuildContext context, int index) {
                 return Flex(
                   direction: Axis.horizontal,
@@ -132,39 +128,17 @@ class CardWidget extends StatelessWidget {
               Text(
                 _handleTimestamp(timestamp),
                 style: const TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 14.0,
                   height: 1.5,
+                  color: Colors.black38
                 ),
               ),
               Flexible(
                 flex: 1,
                 child: Container(), // Flexible用于填充空间
               ),
-              GestureDetector(
-                onTap: () {
-                  createDuplicate?.call(id);
-                },
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
-                  child: const Icon(Icons.copy, size: 16.0,),
-                ),
-              ),
-              // GestureDetector(
-              //   onTap: () {
-              //     onStar?.call(id);
-              //   },
-              //   child: Container(
-              //     padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
-              //     child: const Icon(Icons.star, size: 16.0,),
-              //   ),
-              // ),
-              // TODO: not use delete, batch delete
-              GestureDetector(
-                onTap: () {
-                  onDelete?.call(id);
-                },
-                child: const Icon(Icons.delete, size: 16.0,),
-              ),
+              const SizedBox(width: 4.0,),
+              ...extraChildren,
             ],
           ),
         ],
