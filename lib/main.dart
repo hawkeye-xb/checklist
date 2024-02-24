@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               items: [
                 const PopupMenuItem(
                   value: 'BatchDelete', // TODO：枚举
-                  child: Text('批量删除'),
+                  child: Center(child: Text('Delete')),
                 ),
               ]
             ).then((value) => {
@@ -210,7 +210,9 @@ class _MyHomePageState extends State<MyHomePage> {
           CardType newCard = CardType(
             id: 0,
             title: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
-            contentList: [],
+            contentList: [
+              ContentList(content: ''),
+            ],
             created_at: DateTime.now().millisecondsSinceEpoch,
             updated_at: DateTime.now().millisecondsSinceEpoch,
           );

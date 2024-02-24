@@ -26,6 +26,18 @@ class ContentList {
       checked: map['checked'] == 1 ? true : false,
     );
   }
+
+  ContentList copyWith({
+    // int? id,
+    String? content,
+    bool? checked,
+  }) {
+    return ContentList(
+      // id: id ?? this.id,
+      content: content ?? this.content,
+      checked: checked ?? this.checked,
+    );
+  }
 }
 
 class CardType {
