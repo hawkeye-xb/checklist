@@ -97,6 +97,9 @@ class _DetailsPageState extends State<DetailsPage> {
     setState(() {
       _contentList.removeAt(index);
       _controllers.removeAt(index);
+
+      _focusNodes[index].unfocus();
+      _focusNodes[index].dispose();
       _focusNodes.removeAt(index);
     });
   }
@@ -135,6 +138,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> saveChange() async {
+    // 是否需要失去焦点？
     List<Map<String, dynamic>> latestValues = _contentList.asMap().entries.map((entry) {
       int idx = entry.key;
       ContentList item = entry.value;
@@ -231,15 +235,21 @@ class _DetailsPageState extends State<DetailsPage> {
                                   if (event.logicalKey == LogicalKeyboardKey.backspace) {
                                     if (_controllers[index].text.isEmpty) {
                                       _deleteTextFormField(index);
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        if (_focusNodes.length > index && _focusNodes[index] != null) {
+                                          _focusNodes[index].requestFocus();
+                                        }
+                                      });
                                     }
                                   }
                                 }
                               },
                               child: TextFormField(
                                 focusNode: _focusNodes[index],
-                                onFieldSubmitted: (value) {
-                                  _addTextFormField();
-                                },
+                                // TODO：应该是insert，而不是append。但是需要这个吗？收起键盘也合理
+                                // onFieldSubmitted: (value) {
+                                //   _addTextFormField();
+                                // },
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
