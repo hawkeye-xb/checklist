@@ -27,6 +27,7 @@ class _DetailsPageState extends State<DetailsPage> {
   List<TextEditingController> _controllers = [];
 
   List<ContentList> _contentList = [];
+  List<FocusNode> _focusNodes = [];
 
   @override
   void initState() {
@@ -37,6 +38,8 @@ class _DetailsPageState extends State<DetailsPage> {
     _contentList = widget.defaultCardInfo.contentList.map((e) => e.copyWith()).toList();
     _controllers = widget.defaultCardInfo.contentList
       .map((item) => TextEditingController(text: item.content)).toList();
+    
+    _focusNodes = List.generate(_contentList.length, (index) => FocusNode());
 
     _titleDiffHook = _titleController.text;
     _contentListDiffHook = _contentList.map((e) => e.copyWith()).toList();
@@ -45,8 +48,13 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void dispose() {
     // Dispose of the controllers when the widget is removed from the widget tree
-    _controllers.forEach((controller) => controller.dispose());
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     _titleController.dispose();
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -69,6 +77,28 @@ class _DetailsPageState extends State<DetailsPage> {
     }
 
     return false;
+  }
+
+  void _addTextFormField() {
+    setState(() {
+      FocusNode newFocusNode = FocusNode();
+      _focusNodes.add(newFocusNode);
+
+      _contentList.add(ContentList(content: '', checked: false));
+      _controllers.add(TextEditingController(text: ''));
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        newFocusNode.requestFocus();
+      });
+    });
+  }
+
+  void _deleteTextFormField(int index) {
+    setState(() {
+      _contentList.removeAt(index);
+      _controllers.removeAt(index);
+      _focusNodes.removeAt(index);
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -195,23 +225,21 @@ class _DetailsPageState extends State<DetailsPage> {
                               onKey: (RawKeyEvent event) {
                                 if (event is RawKeyDownEvent) {
                                   if (event.logicalKey == LogicalKeyboardKey.enter) {
-                                    setState(() {
-                                      _contentList.insert(index + 1, ContentList(content: '', checked: false));
-                                      _controllers.insert(index + 1, TextEditingController(text: ''));
-                                    });
+                                    _addTextFormField();
                                   }
                                   // 如果是删除键，且当前的content为空，就删除当前的content
                                   if (event.logicalKey == LogicalKeyboardKey.backspace) {
                                     if (_controllers[index].text.isEmpty) {
-                                      setState(() {
-                                        _contentList.removeAt(index);
-                                        _controllers.removeAt(index);
-                                      });
+                                      _deleteTextFormField(index);
                                     }
                                   }
                                 }
                               },
                               child: TextFormField(
+                                focusNode: _focusNodes[index],
+                                onFieldSubmitted: (value) {
+                                  _addTextFormField();
+                                },
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
@@ -232,12 +260,7 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _contentList.add(ContentList(content: '', checked: false));
-              _controllers.add(TextEditingController(text: ''));
-            });
-          },
+          onPressed: _addTextFormField,
           child: const Icon(Icons.add),
         ),
       ),
