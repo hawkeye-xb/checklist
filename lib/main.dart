@@ -17,10 +17,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // 定义一个颜色变量，用于AppBar、BottomNavigationBar和body的背景色
+    final Color backgroundColor = Colors.deepPurple.shade50;
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: AppBarTheme(
+          backgroundColor: backgroundColor,
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          background: backgroundColor,
+        ),
+        scaffoldBackgroundColor: backgroundColor,
         useMaterial3: true,
       ),
       home: const MyHomePage(),
