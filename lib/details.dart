@@ -175,7 +175,7 @@ class _DetailsPageState extends State<DetailsPage> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 80.0),
           child: Flex(
             direction: Axis.vertical,
             crossAxisAlignment: CrossAxisAlignment.start,
