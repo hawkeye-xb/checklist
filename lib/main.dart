@@ -176,25 +176,31 @@ class _MyHomePageState extends State<MyHomePage> {
                           : _cardList[index].contentList,
                         timestamp: _cardList[index].updated_at,
                         extraChildren: _delete ? [
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: Checkbox(
-                              value: _selectedIds.contains(_cardList[index].id),
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  if (value == true) {
-                                    _selectedIds.add(_cardList[index].id);
-                                  } else {
-                                    _selectedIds.remove(_cardList[index].id);
-                                  }
-                                });
-                              },
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: Checkbox(
+                                value: _selectedIds.contains(_cardList[index].id),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      _selectedIds.add(_cardList[index].id);
+                                    } else {
+                                      _selectedIds.remove(_cardList[index].id);
+                                    }
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         ] : [
                           PopupMenuButton(
-                            child: const Icon(Icons.more_horiz, size: 18.0,),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Icon(Icons.more_horiz, size: 16.0,),
+                            ),
                             onSelected: (String value) {
                               if (value == 'Duplicate') {
                                 handleCreateDuplicate(_cardList[index].id);

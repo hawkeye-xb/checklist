@@ -43,7 +43,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0), // bottom 有more按钮提供了8.0的padding
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
@@ -60,13 +60,16 @@ class CardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20.0,
-              height: 1.5,
-              fontWeight: FontWeight.w600,
-              overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20.0,
+                height: 1.5,
+                fontWeight: FontWeight.w500,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           // 占位
