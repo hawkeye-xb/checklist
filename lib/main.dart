@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // 定义一个颜色变量，用于AppBar、BottomNavigationBar和body的背景色
+    // TODO：设置主题
     final Color backgroundColor = Colors.deepPurple.shade50;
 
     return MaterialApp(
@@ -193,11 +193,34 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ] : [
-                          GestureDetector(
-                            onTap: () {
-                              handleCreateDuplicate(_cardList[index].id);
+                          PopupMenuButton(
+                            child: const Icon(Icons.more_horiz, size: 18.0,),
+                            onSelected: (String value) {
+                              if (value == 'Duplicate') {
+                                handleCreateDuplicate(_cardList[index].id);
+                              }
+                              if (value == 'Delete') {
+                                DatabaseHelper().deleteCardType(_cardList[index].id).then((value) {
+                                  DatabaseHelper().getCardTypes().then((value) {
+                                    setState(() {
+                                      setCardList(value);
+                                    });
+                                  });
+                                });
+                              }
                             },
-                            child: const Icon(Icons.copy, size: 18.0,),
+                            itemBuilder: (BuildContext context) {
+                              return [
+                                const PopupMenuItem(
+                                  value: 'Duplicate',
+                                  child: Text('Duplicate'),
+                                ),
+                                const PopupMenuItem(
+                                  value: 'Delete',
+                                  child: Text('Delete'),
+                                ),
+                              ];
+                            },
                           ),
                         ],
                       ),
