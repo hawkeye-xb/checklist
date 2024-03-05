@@ -4,6 +4,7 @@ import 'package:checklist/components/card.dart';
 import 'package:checklist/types.dart';
 import 'package:intl/intl.dart';
 import 'apis/databaseHelper.dart';
+import 'package:checklist/components/main/menu.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter绑定初始化
@@ -121,28 +122,21 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           icon: const Icon(Icons.close),
         ) : null,
-        actions: !_delete ? [IconButton(
-          onPressed: () {
-             // 准备封装起来吧，计算位置
-            showMenu(
-              context: context,
-              position: const RelativeRect.fromLTRB(100000, 112, 0, 0),
-              items: [
-                const PopupMenuItem(
-                  value: 'BatchDelete', // TODO：枚举
-                  child: Center(child: Text('Delete')),
-                ),
-              ]
-            ).then((value) => {
+        actions: !_delete ? [
+          MainHeadMenu(
+            icon: const Icon(Icons.settings),
+            menuItems: [
+              MenuItem(label: 'Delete', value: 'BatchDelete'),
+            ],
+            onItemSelected: (String value) {
               if (value == 'BatchDelete') {
                 setState(() {
                   _delete = true;
-                }),
+                });
               }
-            });
-          },
-          icon: const Icon(Icons.settings),
-        )] : null,
+            },
+          ),
+        ] : null,
       ),
       body: Flex(
         direction: Axis.vertical,
@@ -152,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Container(
               // height: MediaQuery.of(context).size.height * 0.5,
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: MediaQuery.of(context).size.width ~/ 150,
