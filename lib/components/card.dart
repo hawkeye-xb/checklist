@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class CardWidget extends StatelessWidget {
   final int id;
   final String title;
-  final List<ContentList> firstThreeItems;
+  final List<ContentList> items;
   final int timestamp; // ?
   final List<Widget> extraChildren;
   final bool favorite;
@@ -14,7 +14,7 @@ class CardWidget extends StatelessWidget {
     super.key,
     required this.id,
     this.title = "Card Widget",
-    this.firstThreeItems = const [],
+    this.items = const [],
     // 日期默认1970年1月1日
     this.timestamp = 0,
     this.extraChildren = const [],
@@ -77,17 +77,35 @@ class CardWidget extends StatelessWidget {
           // 占位
           // const SizedBox(height: 8.0,),
           // 状态展示
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              if (favorite) const Icon(Icons.star, size: 14.0,),
-              if (!favorite) const Icon(Icons.star_border, size: 14.0,), // TODO: remove
-            ],
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Flex(
+              direction: Axis.horizontal,
+              children: [
+                // items每个元素的checked属性都为true时，返回true。
+                if (items.every((element) => element.checked)) const Icon(Icons.done_all, size: 14.0,),
+                // 展示未完成的数量
+                if (!items.every((element) => element.checked)) Text(
+                  '${items.where((element) => element.checked).length}/${items.length}',
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    height: 1.5,
+                    color: Colors.black38,
+                  ),
+                ),
+                const Spacer(), // 添加一个 Spacer 组件, 使得后面的内容靠右对齐
+                if (favorite) const Icon(Icons.star, size: 14.0,),
+              ],
+            ),
           ),
           Flexible(
             flex: 1,
             child: ListView.builder(
-              itemCount: firstThreeItems.length,
+              // itemCount: items.length,
+              itemCount: 
+                items.length > 3
+                  ? 3
+                  : items.length,
               itemBuilder: (BuildContext context, int index) {
                 return Flex(
                   direction: Axis.horizontal,
@@ -103,7 +121,7 @@ class CardWidget extends StatelessWidget {
                           height: 24.0,
                           child: Radio(
                             groupValue: true,
-                            value: firstThreeItems[index].checked,
+                            value: items[index].checked,
                             onChanged: (bool? value) {},
                           ),
                         ),
@@ -113,12 +131,12 @@ class CardWidget extends StatelessWidget {
                       flex: 1,
                       child: RichText(
                         text: TextSpan(
-                          text: firstThreeItems[index].content,
+                          text: items[index].content,
                           style: const TextStyle(
                             fontSize: 16.0,
                             height: 1.5,
                           ).merge(
-                            firstThreeItems[index].checked 
+                            items[index].checked 
                               ? const TextStyle(decoration: TextDecoration.lineThrough, color: Colors.black38,)
                               : const TextStyle(color: Colors.black87),
                           ),

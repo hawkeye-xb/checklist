@@ -179,9 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: CardWidget(
                         id: _cardList[index].id,
                         title: _cardList[index].title,
-                        firstThreeItems: _cardList[index].contentList.length > 3 
-                          ? _cardList[index].contentList.sublist(0, 3)
-                          : _cardList[index].contentList,
+                        items: _cardList[index].contentList,
                         timestamp: _cardList[index].updated_at,
                         favorite: _cardList[index].favorite,
                         extraChildren: _delete ? [
