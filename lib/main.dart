@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'apis/databaseHelper.dart';
 import 'package:checklist/components/main/menu.dart';
 
+import 'apis/index.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter绑定初始化
   DatabaseHelper().db; // 初始化数据库
@@ -141,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          const Text('All Checklist cards'), // TODO: filter
+          // const Text('All Checklist cards'), // TODO: filter
           // TODO: 搜索框
           Expanded(
             child: Container(
@@ -175,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ? _cardList[index].contentList.sublist(0, 3)
                           : _cardList[index].contentList,
                         timestamp: _cardList[index].updated_at,
+                        favorite: _cardList[index].favorite,
                         extraChildren: _delete ? [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -202,6 +205,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: const Icon(Icons.more_horiz, size: 16.0,),
                             ),
                             onSelected: (String value) {
+                              if (value == 'Favorite') {
+                                updateFavorite(_cardList[index].id, !_cardList[index].favorite).then((value) {
+                                  DatabaseHelper().getCardTypes().then((value) {
+                                    setState(() {
+                                      setCardList(value);
+                                    });
+                                  });
+                                });
+                              }
                               if (value == 'Duplicate') {
                                 handleCreateDuplicate(_cardList[index].id);
                               }
@@ -217,6 +229,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             itemBuilder: (BuildContext context) {
                               return [
+                                const PopupMenuItem(
+                                  value: 'Favorite',
+                                  child: Text('Favorite'),
+                                ),
                                 const PopupMenuItem(
                                   value: 'Duplicate',
                                   child: Text('Duplicate'),

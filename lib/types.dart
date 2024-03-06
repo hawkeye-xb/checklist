@@ -46,6 +46,7 @@ class CardType {
   List<ContentList> contentList;
   int created_at; // TODO: createdAt
   int updated_at;
+  bool favorite;
 
   CardType({
     required this.id,
@@ -53,6 +54,7 @@ class CardType {
     this.contentList = const [],
     required this.created_at,
     required this.updated_at,
+    this.favorite = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -62,6 +64,7 @@ class CardType {
       'contentList': jsonEncode(contentList.map((x) => x.toMap()).toList()),
       'created_at': created_at,
       'updated_at': updated_at,
+      'favorite': favorite ? 1 : 0, // 1 or 0
     };
   }
 
@@ -78,6 +81,7 @@ class CardType {
         : [],
       created_at: map['created_at'] ?? 0,
       updated_at: map['updated_at'] ?? 0,
+      favorite: map['favorite'] == 1 ? true : false,
     );
   }
 }

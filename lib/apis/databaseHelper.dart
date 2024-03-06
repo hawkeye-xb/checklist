@@ -18,29 +18,28 @@ class DatabaseHelper {
   initDb() async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'card_type_db.db');
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    var db = await openDatabase(path, version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return db;
   }
 
   void _onCreate(Database db, int newVersion) async {
-    print('Creating new table');
     await db.execute('''
       CREATE TABLE CardType (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         contentList TEXT,
         created_at INTEGER,
-        updated_at INTEGER
+        updated_at INTEGER,
+        favorite INTEGER DEFAULT 0
       )
     '''); // 结尾逗号不能要
-    // 注意，这里我们将contentList存储为TEXT类型，实际将它存储为JSON字符串。
   }
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE CardType ADD COLUMN created_at INTEGER');
-    //   await db.execute('ALTER TABLE CardType ADD COLUMN updated_at INTEGER');
-    // }
+    // 如果旧版本小于2，那么添加favorite字段
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE CardType ADD COLUMN favorite INTEGER DEFAULT 0');
+    }
   }
 
   // 增加新的CardType

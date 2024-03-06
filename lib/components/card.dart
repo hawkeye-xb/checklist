@@ -8,6 +8,7 @@ class CardWidget extends StatelessWidget {
   final List<ContentList> firstThreeItems;
   final int timestamp; // ?
   final List<Widget> extraChildren;
+  final bool favorite;
 
   const CardWidget({
     super.key,
@@ -17,6 +18,7 @@ class CardWidget extends StatelessWidget {
     // 日期默认1970年1月1日
     this.timestamp = 0,
     this.extraChildren = const [],
+    this.favorite = false,
   });
 
   /*
@@ -73,7 +75,15 @@ class CardWidget extends StatelessWidget {
             ),
           ),
           // 占位
-          const SizedBox(height: 8.0,),
+          // const SizedBox(height: 8.0,),
+          // 状态展示
+          Flex(
+            direction: Axis.horizontal,
+            children: [
+              if (favorite) const Icon(Icons.star, size: 14.0,),
+              if (!favorite) const Icon(Icons.star_border, size: 14.0,), // TODO: remove
+            ],
+          ),
           Flexible(
             flex: 1,
             child: ListView.builder(
@@ -130,6 +140,7 @@ class CardWidget extends StatelessWidget {
             children: [
               Text(
                 _handleTimestamp(timestamp),
+                // '2024/11/12',
                 style: const TextStyle(
                   fontSize: 14.0,
                   height: 1.5,
