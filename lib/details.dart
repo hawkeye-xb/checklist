@@ -155,6 +155,7 @@ class _DetailsPageState extends State<DetailsPage> {
       contentList: latestValues.map((map) => ContentList(content: map['content'] ?? '', checked: map['checked'] ?? false)).toList(),
       created_at: widget.defaultCardInfo.created_at,
       updated_at: DateTime.now().millisecondsSinceEpoch,
+      favorite: widget.defaultCardInfo.favorite,
     );
 
     await DatabaseHelper().updateCardType(updatedCard);
