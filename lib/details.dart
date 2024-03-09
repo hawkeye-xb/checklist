@@ -203,7 +203,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       padding: const EdgeInsets.fromLTRB(12.0, 0, 16.0, 0),
                       margin: const EdgeInsets.fromLTRB(0, 0.0, 0, 4.0), // or 8px
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Flex(
@@ -251,8 +251,11 @@ class _DetailsPageState extends State<DetailsPage> {
                                 // onFieldSubmitted: (value) {
                                 //   _addTextFormField();
                                 // },
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
+                                  labelStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.onSurface,
+                                  ), // default?
                                 ),
                                 controller: _controllers[index],
                                 style: TextStyle(

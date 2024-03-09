@@ -21,20 +21,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO：设置主题
-    final Color backgroundColor = Colors.deepPurple.shade50;
+    // final Color backgroundColor = Colors.deepPurple.shade50;
+    // 使用ColorScheme.fromSeed来创建颜色方案
+    final ColorScheme colorScheme = ColorScheme.fromSeed(
+      seedColor: Colors.deepPurple,
+      // background: backgroundColor,
+    );
 
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: backgroundColor,
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          background: backgroundColor,
-        ),
-        scaffoldBackgroundColor: backgroundColor,
+        // appBarTheme: AppBarTheme(
+        //   backgroundColor: backgroundColor,
+        // ),
+        colorScheme: colorScheme,
         useMaterial3: true,
+        // scaffoldBackgroundColor: backgroundColor,
       ),
       home: const MyHomePage(),
     );
