@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class CardWidget extends StatelessWidget {
   final int id;
   final String title;
-  final List<ContentList> items;
+  final List<CheckListItemType> items;
   final int timestamp; // ?
   final List<Widget> extraChildren;
   final bool favorite;

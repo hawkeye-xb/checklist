@@ -21,12 +21,12 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   String _titleDiffHook = '';
-  List<ContentList> _contentListDiffHook = [];
+  List<CheckListItemType> _contentListDiffHook = [];
 
   final TextEditingController _titleController = TextEditingController(text: '');
   List<TextEditingController> _controllers = [];
 
-  List<ContentList> _contentList = [];
+  List<CheckListItemType> _contentList = [];
   List<FocusNode> _focusNodes = [];
 
   @override
@@ -84,7 +84,7 @@ class _DetailsPageState extends State<DetailsPage> {
       FocusNode newFocusNode = FocusNode();
       _focusNodes.add(newFocusNode);
 
-      _contentList.add(ContentList(content: '', checked: false));
+      _contentList.add(CheckListItemType(content: '', checked: false));
       _controllers.add(TextEditingController(text: ''));
       
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -141,7 +141,7 @@ class _DetailsPageState extends State<DetailsPage> {
     // 是否需要失去焦点？
     List<Map<String, dynamic>> latestValues = _contentList.asMap().entries.map((entry) {
       int idx = entry.key;
-      ContentList item = entry.value;
+      CheckListItemType item = entry.value;
       return {
         // 'id': item.id,
         'checked': item.checked,
@@ -152,7 +152,7 @@ class _DetailsPageState extends State<DetailsPage> {
     CardType updatedCard = CardType(
       id: widget.defaultCardInfo.id,
       title: _titleController.text,
-      contentList: latestValues.map((map) => ContentList(content: map['content'] ?? '', checked: map['checked'] ?? false)).toList(),
+      contentList: latestValues.map((map) => CheckListItemType(content: map['content'] ?? '', checked: map['checked'] ?? false)).toList(),
       created_at: widget.defaultCardInfo.created_at,
       updated_at: DateTime.now().millisecondsSinceEpoch,
       favorite: widget.defaultCardInfo.favorite,

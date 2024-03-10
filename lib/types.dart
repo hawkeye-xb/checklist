@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-class ContentList {
+class CheckListItemType {
   // int id;
   String content;
   bool checked;
 
-  ContentList({
+  CheckListItemType({
     // required this.id,
     required this.content,
     this.checked = false,
@@ -19,20 +19,20 @@ class ContentList {
     };
   }
 
-  factory ContentList.fromMap(Map<String, dynamic> map) {
-    return ContentList(
+  factory CheckListItemType.fromMap(Map<String, dynamic> map) {
+    return CheckListItemType(
       // id: map['id'],
       content: map['content'],
       checked: map['checked'] == 1 ? true : false,
     );
   }
 
-  ContentList copyWith({
+  CheckListItemType copyWith({
     // int? id,
     String? content,
     bool? checked,
   }) {
-    return ContentList(
+    return CheckListItemType(
       // id: id ?? this.id,
       content: content ?? this.content,
       checked: checked ?? this.checked,
@@ -43,7 +43,7 @@ class ContentList {
 class CardType {
   int id; // id现在是可空类型，因为它将自动由数据库生成
   String title;
-  List<ContentList> contentList;
+  List<CheckListItemType> contentList;
   int created_at; // TODO: createdAt
   int updated_at;
   bool favorite;
@@ -73,9 +73,9 @@ class CardType {
       id: map['id'] ?? 0, // ?没创建id？不对吧
       title: map['title'],
       contentList: map['contentList'] != null
-        ? List<ContentList>.from(
+        ? List<CheckListItemType>.from(
             jsonDecode(
-              map['contentList']).map((x) => ContentList.fromMap(x)
+              map['contentList']).map((x) => CheckListItemType.fromMap(x)
             )
           )
         : [],

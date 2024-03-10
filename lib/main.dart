@@ -273,7 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
             id: 0,
             title: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
             contentList: [
-              ContentList(content: ''),
+              CheckListItemType(content: ''),
             ],
             created_at: DateTime.now().millisecondsSinceEpoch,
             updated_at: DateTime.now().millisecondsSinceEpoch,
