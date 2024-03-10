@@ -161,108 +161,105 @@ class _MyHomePageState extends State<MyHomePage> {
           // const Text('All Checklist cards'), // TODO: filter
           // TODO: 搜索框
           Expanded(
-            child: Container(
-              // height: MediaQuery.of(context).size.height * 0.5,
-              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MediaQuery.of(context).size.width ~/ 150,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1, // 宽高比
-                ),
-                itemCount: _cardList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    key: ValueKey(_cardList[index].id),
-                    constraints: const BoxConstraints(minWidth: 150),
-                    child: GestureDetector(
-                      onTap: () {
-                        navigateToDetailsPage(_cardList[index]);
-                      },
-                      onLongPress: () {
-                        setState(() {
-                          _delete = true;
-                        });
-                      },
-                      child: CardWidget(
-                        id: _cardList[index].id,
-                        title: _cardList[index].title,
-                        items: _cardList[index].contentList,
-                        timestamp: _cardList[index].updated_at,
-                        favorite: _cardList[index].favorite,
-                        extraChildren: _delete ? [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Checkbox(
-                                value: _selectedIds.contains(_cardList[index].id),
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    if (value == true) {
-                                      _selectedIds.add(_cardList[index].id);
-                                    } else {
-                                      _selectedIds.remove(_cardList[index].id);
-                                    }
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ] : [
-                          PopupMenuButton(
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Icon(Icons.more_horiz, size: 16.0,),
-                            ),
-                            onSelected: (String value) {
-                              if (value == 'Favorite') {
-                                updateFavorite(_cardList[index].id, !_cardList[index].favorite).then((value) {
-                                  DatabaseHelper().getCardTypes().then((value) {
-                                    setState(() {
-                                      setCardList(value);
-                                    });
-                                  });
-                                });
-                              }
-                              if (value == 'Duplicate') {
-                                handleCreateDuplicate(_cardList[index].id);
-                              }
-                              if (value == 'Delete') {
-                                DatabaseHelper().deleteCardType(_cardList[index].id).then((value) {
-                                  DatabaseHelper().getCardTypes().then((value) {
-                                    setState(() {
-                                      setCardList(value);
-                                    });
-                                  });
-                                });
-                              }
-                            },
-                            itemBuilder: (BuildContext context) {
-                              return [
-                                const PopupMenuItem(
-                                  value: 'Favorite',
-                                  child: Text('Favorite'),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'Duplicate',
-                                  child: Text('Duplicate'),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'Delete',
-                                  child: Text('Delete'),
-                                ),
-                              ];
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+            child: GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0), // 添加上下的内边距
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: MediaQuery.of(context).size.width ~/ 150,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1, // 宽高比
               ),
+              itemCount: _cardList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  key: ValueKey(_cardList[index].id),
+                  constraints: const BoxConstraints(minWidth: 150),
+                  child: GestureDetector(
+                    onTap: () {
+                      navigateToDetailsPage(_cardList[index]);
+                    },
+                    onLongPress: () {
+                      setState(() {
+                        _delete = true;
+                      });
+                    },
+                    child: CardWidget(
+                      id: _cardList[index].id,
+                      title: _cardList[index].title,
+                      items: _cardList[index].contentList,
+                      timestamp: _cardList[index].updated_at,
+                      favorite: _cardList[index].favorite,
+                      extraChildren: _delete ? [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: Checkbox(
+                              value: _selectedIds.contains(_cardList[index].id),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  if (value == true) {
+                                    _selectedIds.add(_cardList[index].id);
+                                  } else {
+                                    _selectedIds.remove(_cardList[index].id);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ] : [
+                        PopupMenuButton(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Icon(Icons.more_horiz, size: 16.0,),
+                          ),
+                          onSelected: (String value) {
+                            if (value == 'Favorite') {
+                              updateFavorite(_cardList[index].id, !_cardList[index].favorite).then((value) {
+                                DatabaseHelper().getCardTypes().then((value) {
+                                  setState(() {
+                                    setCardList(value);
+                                  });
+                                });
+                              });
+                            }
+                            if (value == 'Duplicate') {
+                              handleCreateDuplicate(_cardList[index].id);
+                            }
+                            if (value == 'Delete') {
+                              DatabaseHelper().deleteCardType(_cardList[index].id).then((value) {
+                                DatabaseHelper().getCardTypes().then((value) {
+                                  setState(() {
+                                    setCardList(value);
+                                  });
+                                });
+                              });
+                            }
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              const PopupMenuItem(
+                                value: 'Favorite',
+                                child: Text('Favorite'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'Duplicate',
+                                child: Text('Duplicate'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'Delete',
+                                child: Text('Delete'),
+                              ),
+                            ];
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
