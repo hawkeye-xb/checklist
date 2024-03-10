@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'checklist',
+      title: '勾勾清单',
       theme: ThemeData(
         // appBarTheme: AppBarTheme(
         //   backgroundColor: backgroundColor,
