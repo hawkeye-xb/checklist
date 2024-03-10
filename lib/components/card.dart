@@ -48,7 +48,7 @@ class CardWidget extends StatelessWidget {
       Container(
         padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0), // bottom 有more按钮提供了8.0的padding
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: favorite ? Theme.of(context).colorScheme.secondaryContainer : Colors.white,
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: const [
             BoxShadow(

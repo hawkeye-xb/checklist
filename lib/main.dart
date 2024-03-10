@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'checklist',
       theme: ThemeData(
         // appBarTheme: AppBarTheme(
         //   backgroundColor: backgroundColor,
@@ -57,9 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<CardType> _cardList = [];
   void setCardList(List<CardType> value) {
     _cardList.clear();
-    _cardList.addAll(sortCardListByFavorite(value));
+    _cardList.addAll(sortCardListByUpdatedAt(value));
   }
 
+  // 按照updated_at 排序
+  List<CardType> sortCardListByUpdatedAt(List<CardType> cardType) {
+    cardType.sort((a, b) => b.updated_at.compareTo(a.updated_at));
+    return cardType;
+  }
+
+  // todo: 需要吗？（待确认）
   List<CardType> sortCardListByFavorite(List<CardType> cardType) {
     // 将数组按照favorite字段区分，分别按照updated_at排序，再合并
     List<CardType> favoriteList = cardType.where((element) => element.favorite).toList();
