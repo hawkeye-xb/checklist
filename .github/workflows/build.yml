@@ -56,9 +56,10 @@ jobs:
       # 步骤3: 自动生成标签
       - name: Generate tag
         id: autotag
-        uses: butlerlogic/action-autotag@v2.1
-        with:
+        uses: butlerlogic/action-autotag@stable
+        env:
           GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        with:
           strategy: increment
           prefix: "v"
           release_branches: main
