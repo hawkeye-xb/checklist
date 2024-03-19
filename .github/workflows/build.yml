@@ -76,11 +76,13 @@ jobs:
           for file in build/app/outputs/flutter-apk/*; do
             if [ -f "$file" ]; then
               echo "Uploading $file"
-              curl -X POST \
+              curl -v -X POST \
                 -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                 -H "Content-Type: application/octet-stream" \
                 --data-binary @"$file" \
                 "${{ steps.create_release.outputs.upload_url }}?name=$(basename "$file")"
+            else
+              echo "File not found: $file"
             fi
           done
         env:
