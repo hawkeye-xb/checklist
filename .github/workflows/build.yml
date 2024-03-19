@@ -21,11 +21,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      
-      - name: Install Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '3.x.x'
 
       - name: Create Keystore Properties
         run: |
@@ -44,6 +39,11 @@ jobs:
         run: ls -laq
         working-directory: android
       
+      - name: Install Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.19.0'
+          
       - name: Get dependencies
         run: flutter pub get
    
