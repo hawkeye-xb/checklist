@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
           MainHeadMenu(
             icon: const Icon(Icons.settings),
             menuItems: [
-              MenuItem(label: 'Delete', value: 'BatchDelete'),
+              MenuItem(label: '批量删除', value: 'BatchDelete'),
             ],
             onItemSelected: (String value) {
               if (value == 'BatchDelete') {
@@ -242,15 +242,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             return [
                               const PopupMenuItem(
                                 value: 'Favorite',
-                                child: Text('Favorite'),
+                                child: Text('收藏'),
                               ),
                               const PopupMenuItem(
                                 value: 'Duplicate',
-                                child: Text('Duplicate'),
+                                child: Text('副本'),
                               ),
                               const PopupMenuItem(
                                 value: 'Delete',
-                                child: Text('Delete'),
+                                child: Text('删除'),
                               ),
                             ];
                           },

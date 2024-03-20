@@ -110,14 +110,17 @@ class _DetailsPageState extends State<DetailsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('remind'), // use English
-            content: const Text('There are unsaved changes. Do you want to save them?'),
+            // title: const Text('remind'), // use English
+            title: const Text('提示'),
+            // content: const Text('There are unsaved changes. Do you want to save them?'),
+            content: const Text('有未保存的修改，是否保存？'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: const Text('do not', style: TextStyle(color: Colors.grey),),
+                // child: const Text('do not', style: TextStyle(color: Colors.grey),),
+                child: const Text('不保存', style: TextStyle(color: Colors.grey),),
               ),
               TextButton(
                 onPressed: () {
@@ -126,7 +129,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     Navigator.of(context).pop(true);
                   });
                 },
-                child: const Text('save'),
+                // child: const Text('save'),
+                child: const Text('保存'),
               ),
             ],
           );
