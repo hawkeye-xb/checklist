@@ -1,16 +1,32 @@
-# checklist
+# 勾勾清单
+## 项目背景
+### 为什么重复造轮子
+- 从0落地过Flutter项目
+- 个人生活需要
 
-A new Flutter project.
+最近临近过年，加上经常出门，需要频繁列出门必带物品的确认清单。本来用的华为备忘录，一次两次还好，都重新列，但是却没有复制的功能！复制的内容需要重新设置成Todo清单，另外带提醒功能的不聚会，容易与别的提醒搞混。接着研究了iPhone的备忘录，也没有！并且都不能快速创建副本。
 
-## Getting Started
+所以就造了个轮子，一开始使用web indexDB做过一版有功能没有ui的，打算将web tab添加到桌面快速打开，通过浏览器tab做快速打开也勉强能接受，不过得联网（没法通过发送文件，直接将HTML添加到桌面），还有就是我可能就我接受了。
 
-This project is a starting point for a Flutter application.
+后续是想要添加提醒功能，作为无联网日常小工具使用，使用过weex和rn之后，开发感确实也谈不上太好，更别说直接webview的方式了，苹果都提示禁止提示了十多年了。也正好，作为独立开发过河摸石头，在这基础上刚好想要试试Flutter，就改查APP开发了。
 
-A few resources to get you started if this is your first Flutter project:
+除了快速副本确认清单，可以根据新文件修改清单内容之外；还找到了个场景，比如：起床八段锦、睡前十分钟阅读也是个人可以使用上的。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 功能整理
+## 开发过程（Blog）
+过程记录，作为Blog分享。(暂无链接)
+- Flutter 环境搭建。
+- 项目开发，代码仰仗GPT大哥。
+  - GPT的一些使用。
+	- Github Copilot的一些使用。
+- 图标设计。
+- APP 发布
+	- apple app store（Todo：买账号..）
+	- google play（进行中）
+		- App bundle发布
+		- apk发布
+	- ~~华为应用商城（国内需要软著）~~
+	- APK 发布Github Release（CICD已完成）✅
+### 
+## Release
+[所有下载安装包](https://github.com/hawkeye-xb/checklist/releases)
