@@ -14,19 +14,30 @@
 
 ## 功能整理
 ## 开发过程（Blog）
-过程记录，作为Blog分享。(暂无链接)
-- Flutter 环境搭建。
-- 项目开发，代码仰仗GPT大哥。
+过程记录，作为Blog分享。
+- [Flutter 环境搭建](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/setFlutterEnv.md)
+- 研发过程
+	- [代码开发，仰仗GPT大哥](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/devChecklistProject.md)
   - GPT的一些使用。
-	- Github Copilot的一些使用。
+  - Github Copilot的一些使用。
+  - [FLutter 打包APK](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/flutterBuildApk.md)
+
 - 图标设计。
 - APP 发布
 	- apple app store（Todo：买账号..）
 	- google play（进行中）
+	  - 账号（需要充25刀）
 		- App bundle发布
 		- apk发布
 	- ~~华为应用商城（国内需要软著）~~
 	- APK 发布Github Release（CICD已完成）✅
+	  - [手动发布到Github Release](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/publishOnGithubRelease.md)
+	  - [自动构建、发布到Github Release](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/apkPublishGithubPipeline.md)
 ### 
 ## Release
+1. **app-armeabi-v7a-release.apk**:
+    - 这个APK是为搭载ARMv7或更低版本CPU架构的设备准备的。ARMv7架构是一种32位架构，广泛用于较旧的Android设备中。
+2. **app-arm64-v8a-release.apk**:
+    - 这个APK是为搭载ARMv8-A（通常称为arm64）CPU架构的设备准备的。ARMv8-A是一种64位架构，提供了更好的性能和更高效的能源使用，是现代Android设备中常见的架构。
+
 [所有下载安装包](https://github.com/hawkeye-xb/checklist/releases)
