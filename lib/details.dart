@@ -279,7 +279,11 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _addTextFormField,
-          child: const Icon(Icons.add),
+          child: Semantics(
+            button: true,
+            label: '添加待办项',
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
