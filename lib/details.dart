@@ -193,7 +193,12 @@ class _DetailsPageState extends State<DetailsPage> {
             direction: Axis.vertical,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(controller: _titleController,),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: '标题',
+                ),
+                controller: _titleController,
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 8.0),
                 child: Text(
@@ -260,6 +265,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 //   _addTextFormField();
                                 // },
                                 decoration: InputDecoration(
+                                  hintText: '待办事项',
                                   border: InputBorder.none,
                                   labelStyle: TextStyle(
                                     color: Theme.of(context).colorScheme.onSurface,
