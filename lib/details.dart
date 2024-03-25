@@ -179,7 +179,11 @@ class _DetailsPageState extends State<DetailsPage> {
           actions: [
             IconButton(
               onPressed: saveChange, 
-              icon: const Icon(Icons.check),
+              icon: Semantics(
+                button: true,
+                label: '保存修改',
+                child: const Icon(Icons.check),
+              ),
             ),
           ],
         ),
