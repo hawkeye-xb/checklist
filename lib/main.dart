@@ -286,7 +286,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
             });
         },
-        child: const Icon(Icons.add),
+        child: Semantics(
+          button: true,
+          label: '添加清单文件',
+          child: const Icon(Icons.add),
+        ),
       ),
       bottomNavigationBar: _delete ? BottomNavigationBar(
         // currentIndex: -1, // 怎么才能默认不选择
