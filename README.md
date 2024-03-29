@@ -12,8 +12,9 @@
 除了快速副本确认清单，可以根据新文件修改清单内容之外；还找到了个场景，比如：起床八段锦、睡前十分钟阅读也是个人可以使用上的。
 
 ## 功能整理
+
 ## 开发过程（Blog）
-过程记录，作为Blog分享。
+过程记录，作为Blog分享。方便给大家做个参考，说不准什么时候、什么原因，想要成为独立开发者。
 - [Flutter 环境搭建](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/setFlutterEnv.md)
 - 研发过程
 	- [代码开发，仰仗GPT大哥](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/devChecklistProject.md)
