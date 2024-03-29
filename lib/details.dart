@@ -212,79 +212,71 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: ListView.builder(
                   itemCount: _contentList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      padding: const EdgeInsets.fromLTRB(12.0, 0, 16.0, 0),
-                      margin: const EdgeInsets.fromLTRB(0, 0.0, 0, 4.0), // or 8px
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Flex(
-                        direction: Axis.horizontal,
-                        children: [
-                          SizedBox(
-                            width: 24.0,
-                            height: 24.0,
-                            child: Semantics(
-                              label: _contentList[index].checked ? '取消完成第${index +1}条待办' : '完成第${index +1}条待办',
-                              button: true,
-                              child: Radio<bool>(
-                                groupValue: true,
-                                value: _contentList[index].checked,
-                                toggleable: true,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _contentList[index].checked = !_contentList[index].checked;
-                                  });
-                                },
-                              ),
-                            )
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: RawKeyboardListener(
-                              focusNode: FocusNode(),
-                              onKey: (RawKeyEvent event) {
-                                if (event is RawKeyDownEvent) {
-                                  if (event.logicalKey == LogicalKeyboardKey.enter) {
-                                    _addTextFormField();
-                                  }
-                                  // 如果是删除键，且当前的content为空，就删除当前的content
-                                  if (event.logicalKey == LogicalKeyboardKey.backspace) {
-                                    if (_controllers[index].text.isEmpty) {
-                                      _deleteTextFormField(index);
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        if (_focusNodes.length > index && _focusNodes[index] != null) {
-                                          _focusNodes[index].requestFocus();
-                                        }
-                                      });
+                    return Stack(children: [
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(48.0, 0, 16.0, 0),
+                        margin: const EdgeInsets.fromLTRB(0, 0.0, 0, 4.0), // or 8px
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: RawKeyboardListener(
+                          focusNode: FocusNode(),
+                          onKey: (RawKeyEvent event) {
+                            if (event is RawKeyDownEvent) {
+                              if (event.logicalKey == LogicalKeyboardKey.enter) {
+                                _addTextFormField();
+                              }
+                              // 如果是删除键，且当前的content为空，就删除当前的content
+                              if (event.logicalKey == LogicalKeyboardKey.backspace) {
+                                if (_controllers[index].text.isEmpty) {
+                                  _deleteTextFormField(index);
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    if (_focusNodes.length > index && _focusNodes[index] != null) {
+                                      _focusNodes[index].requestFocus();
                                     }
-                                  }
+                                  });
                                 }
-                              },
-                              child: TextFormField(
-                                focusNode: _focusNodes[index],
-                                // TODO：应该是insert，而不是append。但是需要这个吗？收起键盘也合理
-                                // onFieldSubmitted: (value) {
-                                //   _addTextFormField();
-                                // },
-                                decoration: InputDecoration(
-                                  hintText: '待办事项',
-                                  border: InputBorder.none,
-                                  labelStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ), // default?
-                                ),
-                                controller: _controllers[index],
-                                style: TextStyle(
-                                  decoration: _contentList[index].checked ? TextDecoration.lineThrough : TextDecoration.none,
-                                ),
-                              ),
+                              }
+                            }
+                          },
+                          child: TextFormField(
+                            focusNode: _focusNodes[index],
+                            // TODO：应该是insert，而不是append。但是需要这个吗？收起键盘也合理
+                            decoration: InputDecoration(
+                              hintText: '待办事项',
+                              border: InputBorder.none,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ), // default?
+                            ),
+                            controller: _controllers[index],
+                            style: TextStyle(
+                              decoration: _contentList[index].checked ? TextDecoration.lineThrough : TextDecoration.none,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    );
+                      Positioned(
+                        left: 0.0,
+                        top: 0.0,
+                        bottom: 0.0,
+                        child: Semantics(
+                          label: _contentList[index].checked ? '取消完成第${index +1}条待办' : '完成第${index +1}条待办',
+                          button: true,
+                          child: Center(child: Radio<bool>(
+                            groupValue: true,
+                            value: _contentList[index].checked,
+                            toggleable: true,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _contentList[index].checked = !_contentList[index].checked;
+                              });
+                            },
+                          ),)
+                        )
+                      ),
+                    ],);
                   },
                 ),
               ),
