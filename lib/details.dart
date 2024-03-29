@@ -226,7 +226,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             width: 24.0,
                             height: 24.0,
                             child: Semantics(
-                              label: '保存修改',
+                              label: _contentList[index].checked ? '取消完成第${index +1}条待办' : '完成第${index +1}条待办',
                               button: true,
                               child: Radio<bool>(
                                 groupValue: true,
