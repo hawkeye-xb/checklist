@@ -225,16 +225,20 @@ class _DetailsPageState extends State<DetailsPage> {
                           SizedBox(
                             width: 24.0,
                             height: 24.0,
-                            child: Radio<bool>(
-                              groupValue: true,
-                              value: _contentList[index].checked,
-                              toggleable: true,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _contentList[index].checked = !_contentList[index].checked;
-                                });
-                              },
-                            ),
+                            child: Semantics(
+                              label: '保存修改',
+                              button: true,
+                              child: Radio<bool>(
+                                groupValue: true,
+                                value: _contentList[index].checked,
+                                toggleable: true,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _contentList[index].checked = !_contentList[index].checked;
+                                  });
+                                },
+                              ),
+                            )
                           ),
                           const SizedBox(width: 8.0),
                           Expanded(
