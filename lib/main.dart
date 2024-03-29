@@ -213,7 +213,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         PopupMenuButton(
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
-                            child: const Icon(Icons.more_horiz, size: 16.0,),
+                            child: Semantics(
+                              button: true,
+                              label: '${_cardList[index].title}更多的操作',
+                              child: const Icon(Icons.more_horiz, size: 16.0,),
+                            ),
                           ),
                           onSelected: (String value) {
                             if (value == 'Favorite') {
