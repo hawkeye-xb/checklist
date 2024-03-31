@@ -131,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('勾勾清单'),
         leading: _delete ? IconButton(
           onPressed: () {
             setState(() {

@@ -99,12 +99,30 @@ class CardWidget extends StatelessWidget {
                     ? 3
                     : items.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Transform.scale(
+                  return Stack(children: [
+                    Padding(padding: 
+                      const EdgeInsets.only(left: 18.0),
+                      child: RichText(
+                        text: TextSpan(
+                          text: items[index].content,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            // height: 1.5,
+                          ).merge(
+                            items[index].checked 
+                              ? const TextStyle(decoration: TextDecoration.lineThrough, color: Colors.black38,)
+                              : const TextStyle(color: Colors.black87),
+                          ),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    Positioned(
+                      left: -4.0,
+                      top: 0.0,
+                      bottom: 0.0,
+                      child: Transform.scale(
                         scale: 0.8,
                         child: AbsorbPointer(
                           absorbing: true,
@@ -119,27 +137,8 @@ class CardWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Flexible(
-                        flex: 1,
-                        child: RichText(
-                          text: TextSpan(
-                            text: items[index].content,
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              height: 1.5,
-                            ).merge(
-                              items[index].checked 
-                                ? const TextStyle(decoration: TextDecoration.lineThrough, color: Colors.black38,)
-                                : const TextStyle(color: Colors.black87),
-                            ),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      )
-                      ,
-                    ],
-                  );
+                    ),
+                  ]);
                 },
               ),
             ),
