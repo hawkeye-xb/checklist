@@ -174,127 +174,130 @@ class _DetailsPageState extends State<DetailsPage> {
 
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('详情'),
-          actions: [
-            IconButton(
-              onPressed: saveChange, 
-              icon: Semantics(
-                button: true,
-                label: '保存修改',
-                child: const Icon(Icons.check),
-              ),
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 80.0),
-          child: Flex(
-            direction: Axis.vertical,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: '标题',
-                ),
-                controller: _titleController,
-              ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 8.0),
-                child: Text(
-                  DateFormat('yyyy-MM-dd HH:mm:ss').format(
-                    DateTime.fromMillisecondsSinceEpoch(widget.defaultCardInfo.updated_at)
-                  ).toString()
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: ListView.builder(
-                  itemCount: _contentList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        Stack(children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(40.0, 0, 16.0, 0),
-                            // margin: const EdgeInsets.fromLTRB(0, 0.0, 0, 4.0), // or 8px
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surfaceVariant,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: RawKeyboardListener(
-                              focusNode: FocusNode(),
-                              onKey: (RawKeyEvent event) {
-                                if (event is RawKeyDownEvent) {
-                                  if (event.logicalKey == LogicalKeyboardKey.enter) {
-                                    _addTextFormField();
-                                  }
-                                  // 如果是删除键，且当前的content为空，就删除当前的content
-                                  if (event.logicalKey == LogicalKeyboardKey.backspace) {
-                                    if (_controllers[index].text.isEmpty) {
-                                      _deleteTextFormField(index);
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        if (_focusNodes.length > index && _focusNodes[index] != null) {
-                                          _focusNodes[index].requestFocus();
-                                        }
-                                      });
-                                    }
-                                  }
-                                }
-                              },
-                              child: TextFormField(
-                                focusNode: _focusNodes[index],
-                                // TODO：应该是insert，而不是append。但是需要这个吗？收起键盘也合理
-                                decoration: InputDecoration(
-                                  hintText: '待办事项',
-                                  border: InputBorder.none,
-                                  labelStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ), // default?
-                                ),
-                                controller: _controllers[index],
-                                style: TextStyle(
-                                  decoration: _contentList[index].checked ? TextDecoration.lineThrough : TextDecoration.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 3.0,
-                            top: 0.0,
-                            bottom: 0.0,
-                            child: Semantics(
-                              label: _contentList[index].checked ? '取消完成第${index +1}条待办' : '完成第${index +1}条待办',
-                              button: true,
-                              child: Center(child: Radio<bool>(
-                                groupValue: true,
-                                value: _contentList[index].checked,
-                                toggleable: true,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _contentList[index].checked = !_contentList[index].checked;
-                                  });
-                                },
-                              ),)
-                            )
-                          ),
-                        ]),
-                        const SizedBox(height: 4.0),
-                      ],
-                    );
-                  },
+      child: Semantics(
+        label: '详情编辑页',
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('详情'),
+            actions: [
+              IconButton(
+                onPressed: saveChange, 
+                icon: Semantics(
+                  button: true,
+                  label: '保存修改',
+                  child: const Icon(Icons.check),
                 ),
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _addTextFormField,
-          child: Semantics(
-            button: true,
-            label: '添加待办项',
-            child: const Icon(Icons.add),
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 80.0),
+            child: Flex(
+              direction: Axis.vertical,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: '标题',
+                  ),
+                  controller: _titleController,
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 8.0),
+                  child: Text(
+                    DateFormat('yyyy-MM-dd HH:mm:ss').format(
+                      DateTime.fromMillisecondsSinceEpoch(widget.defaultCardInfo.updated_at)
+                    ).toString()
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: ListView.builder(
+                    itemCount: _contentList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          Stack(children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(40.0, 0, 16.0, 0),
+                              // margin: const EdgeInsets.fromLTRB(0, 0.0, 0, 4.0), // or 8px
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surfaceVariant,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: RawKeyboardListener(
+                                focusNode: FocusNode(),
+                                onKey: (RawKeyEvent event) {
+                                  if (event is RawKeyDownEvent) {
+                                    if (event.logicalKey == LogicalKeyboardKey.enter) {
+                                      _addTextFormField();
+                                    }
+                                    // 如果是删除键，且当前的content为空，就删除当前的content
+                                    if (event.logicalKey == LogicalKeyboardKey.backspace) {
+                                      if (_controllers[index].text.isEmpty) {
+                                        _deleteTextFormField(index);
+                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                          if (_focusNodes.length > index && _focusNodes[index] != null) {
+                                            _focusNodes[index].requestFocus();
+                                          }
+                                        });
+                                      }
+                                    }
+                                  }
+                                },
+                                child: TextFormField(
+                                  focusNode: _focusNodes[index],
+                                  // TODO：应该是insert，而不是append。但是需要这个吗？收起键盘也合理
+                                  decoration: InputDecoration(
+                                    hintText: '待办事项',
+                                    border: InputBorder.none,
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ), // default?
+                                  ),
+                                  controller: _controllers[index],
+                                  style: TextStyle(
+                                    decoration: _contentList[index].checked ? TextDecoration.lineThrough : TextDecoration.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 3.0,
+                              top: 0.0,
+                              bottom: 0.0,
+                              child: Semantics(
+                                label: _contentList[index].checked ? '取消完成第${index +1}条待办' : '完成第${index +1}条待办',
+                                button: true,
+                                child: Center(child: Radio<bool>(
+                                  groupValue: true,
+                                  value: _contentList[index].checked,
+                                  toggleable: true,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _contentList[index].checked = !_contentList[index].checked;
+                                    });
+                                  },
+                                ),)
+                              )
+                            ),
+                          ]),
+                          const SizedBox(height: 4.0),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _addTextFormField,
+            child: Semantics(
+              button: true,
+              label: '添加待办项',
+              child: const Icon(Icons.add),
+            ),
           ),
         ),
       ),
