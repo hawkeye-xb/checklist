@@ -15,12 +15,12 @@
 
 ## 开发过程（Blog）
 过程记录，作为Blog分享。方便给大家做个参考，说不准什么时候、什么原因，想要成为独立开发者。
-- [Flutter 环境搭建](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/setFlutterEnv.md)
+- Flutter 环境搭建
 - 研发过程
-	- [代码开发，仰仗GPT大哥](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/devChecklistProject.md)
+	- 代码开发，仰仗GPT大哥
   - GPT的一些使用。
   - Github Copilot的一些使用。
-  - [FLutter 打包APK](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/flutterBuildApk.md)
+  - FLutter 打包APK
 
 - 图标设计。
 - APP 发布
@@ -31,8 +31,8 @@
 		- apk发布
 	- ~~华为应用商城（国内需要软著）~~
 	- APK 发布Github Release（CICD已完成）✅
-	  - [手动发布到Github Release](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/publishOnGithubRelease.md)
-	  - [自动构建、发布到Github Release](https://github.com/hawkeye-xb/blog/blob/master/A%20first%20look%20at%20independent%20developers/apkPublishGithubPipeline.md)
+	  - 手动发布到Github Release
+	  - 自动构建、发布到Github Release
 ### 
 ## Release
 1. **app-armeabi-v7a-release.apk**:
