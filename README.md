@@ -25,7 +25,7 @@
 - 图标设计。
 - APP 发布
 	- apple app store（Todo：买账号..）
-	- google play（进行中）
+	- google play（卡20+14了😭）
 	  - 账号（需要充25刀）
 		- App bundle发布
 		- apk发布
